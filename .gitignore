@@ -6,6 +6,10 @@ node_modules
 ./packages/*/node_modules
 .pnp
 .pnp.js
+pnpm-lock.yaml
+npm.lock
+yarn.lock
+bun.lockb
 
 # testing
 coverage
