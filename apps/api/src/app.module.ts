@@ -9,7 +9,7 @@ import { AppService } from './app.service';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({\
+    ConfigModule.forRoot({
       // 全局配置
       isGlobal: true,
       // 展开环境变量，将环境变量转换为对象；eg: DB_HOST=localhost -> { DB_HOST: 'localhost' }

@@ -1,6 +1,10 @@
 import { ConfigType, registerAs } from '@nestjs/config'
 import { DataSourceOptions } from 'typeorm'
 
+import dotenv from 'dotenv'
+
+dotenv.config({ path: `.env.${process.env.NODE_ENV}` })
+
 /**
  * @description 数据源配置
  */
