@@ -15,6 +15,9 @@ const dataSourceOptions: DataSourceOptions = {
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
+  entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+  // 同步数据库结构，生产环境需要关闭
+  synchronize: true,
 }
 export const dbRegToken = 'database'
 
