@@ -7,7 +7,6 @@ import {
 } from 'typeorm';
 import { CommonEntity } from '~/common/entity/common.entity';
 
-// export class User {}
 @Entity('users')
 export class UserEntity extends CommonEntity {
   @Column()
@@ -15,13 +14,6 @@ export class UserEntity extends CommonEntity {
 
   @Column({ select: false }) // 设置为 false，表示该字段不参与查询
   password: string;
-
-  // // nullable 设置为 true，表示该字段可以为空
-  // @Column({ nullable: true })
-  // email: string;
-
-  // @Column({ nullable: true })
-  // phone: string;
 
   @Column({ nullable: true })
   nickname: string
