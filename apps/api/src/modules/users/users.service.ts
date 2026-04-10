@@ -25,6 +25,16 @@ export class UsersService {
     return this.userRepository.findOne({ where: { id } });
   }
 
+  async findUserByUserName(username: string) {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .where({
+        name: username,
+        status: 1,
+      })
+      .getOne()
+  }
+
   async update(id: number, updateUserDto: any) {
     const result = await this.userRepository.update(id, updateUserDto);
     console.log('result', result);
