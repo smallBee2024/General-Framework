@@ -1,8 +1,10 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { Bypass } from '~/common/decorators/bypass.decorator';
 
 @Controller('users')
+@Bypass()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

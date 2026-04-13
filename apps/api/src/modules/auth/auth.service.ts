@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 // import { CreateAuthDto } from './dto/create-auth.dto';
 import { UsersService } from '../users/users.service';
-import { isEmpty } from 'lodash-es';
+import { isEmpty } from 'lodash';
 
 @Injectable()
 export class AuthService {
