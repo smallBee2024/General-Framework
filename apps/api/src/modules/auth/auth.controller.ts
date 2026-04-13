@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Req } from '@nestjs/common';
 
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { AuthService } from './auth.service';
@@ -8,7 +8,6 @@ import { LoginDto } from './dto/auth.dto';
 
 
 @Controller('auth')
-@UseGuards(LocalGuard) // 使用本地策略
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
@@ -23,7 +22,9 @@ export class AuthController {
 
   // 登录
   @Post('login')
-  login(@Body() loginDto: LoginDto) {
-    return this.authService.login(loginDto);
+  @UseGuards(LocalGuard) // 使用本地策略
+  login(@Req() req: any) {
+    console.log('登录成功', req.user);
+    return this.authService.login(req.user);
   }
 }

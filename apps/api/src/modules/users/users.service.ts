@@ -25,12 +25,13 @@ export class UsersService {
     return this.userRepository.findOne({ where: { id } });
   }
 
-  async findUserByUserName(username: string) {
+  async findUserByUserName(name: string) {
+    console.log('findUserByUserName', name);
     return this.userRepository
-      .createQueryBuilder('user')
+      .createQueryBuilder('users')
+      .addSelect('users.password')
       .where({
-        name: username,
-        status: 1,
+        name,
       })
       .getOne()
   }

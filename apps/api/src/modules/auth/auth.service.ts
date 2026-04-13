@@ -10,6 +10,7 @@ export class AuthService {
 
   async validateUser(name: string, password: string) {
     const user = await this.usersService.findUserByUserName(name);
+    console.log('validateUser user', user);
     if (isEmpty(user)) {
       return null;
     }
