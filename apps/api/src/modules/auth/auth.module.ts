@@ -8,29 +8,30 @@ import { AuthController } from './auth.controller';
 import { UsersModule } from '../users/users.module';
 import { securityRegToken, ISecurityConfig } from '~/config';
 import { isDev } from '~/global/env';
-import { LocalStrategy } from './strategies/local.strategy';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
   imports: [
-    PassportModule,
+    PassportModule, // 引入 PassportModule 模块
+    // 引入 JwtModule 模块，及配置 JwtModule 模块
     JwtModule.registerAsync({
-      imports: [ConfigModule],
+      imports: [ConfigModule], // 引入 ConfigModule 模块
       useFactory: (configService: ConfigService) => {
         const { jwtSecret, jwtExprire } = configService.get<ISecurityConfig>(securityRegToken)
         return {
-          secret: jwtSecret,
-          signOptions: { expiresIn: jwtExprire },
+          secret: jwtSecret, // 设置密钥
+          signOptions: { expiresIn: jwtExprire }, // 设置过期时间
           ignoreExpiration: isDev, // 开发环境忽略过期时间
         }
       },
-      inject: [ConfigService],
+      inject: [ConfigService], // 注入 ConfigService 服务
     }),
     UsersModule,
   ],
   controllers: [AuthController],
   providers: [
     AuthService,
-    LocalStrategy, // 本地策略: 登录验证
+    JwtStrategy,
   ],
 })
 export class AuthModule {}

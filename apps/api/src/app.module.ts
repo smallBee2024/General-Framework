@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 
 import { DatabaseModule } from './shared/database/database.module';
 import config from '~/config';
 // import { AppController } from './app.controller';
 import { AuthModule } from './modules/auth/auth.module';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
+import { JwtGuard } from './modules/auth/guards/jwt.guard';
 
 @Module({
   imports: [
@@ -27,6 +28,8 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
   controllers: [],
   providers: [
     { provide: APP_INTERCEPTOR, useClass: TransformInterceptor },
+    // 全局注册 jwt 守卫
+    { provide: APP_GUARD, useClass: JwtGuard },
   ],
 })
 export class AppModule {}
