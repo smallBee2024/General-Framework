@@ -36,6 +36,9 @@ export class UserEntity extends CommonEntity {
   @Column({ type: 'tinyint', nullable: true, default: 1 })
   status: number
 
+  @Column({ length: 32 })
+  psalt: string
+
   // @ManyToMany(() => RoleEntity, role => role.users)
   // @JoinTable({
   //   name: 'user_roles',

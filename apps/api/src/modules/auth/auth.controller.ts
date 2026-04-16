@@ -16,7 +16,7 @@ export class AuthController {
   ) {}
 
   // 注册
-  @Post()
+  @Post('register')
   register(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }

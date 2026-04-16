@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Bypass } from '~/common/decorators/bypass.decorator';
+import { Public } from '~/common/decorators/public.decorator';
 
 @Controller('users')
 @Bypass()
@@ -14,6 +15,7 @@ export class UsersController {
   }
 
   @Get()
+  @Public()
   findAll() {
     return this.usersService.findAll();
   }

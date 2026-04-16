@@ -1,20 +1,52 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { InjectRepository, InjectEntityManager } from '@nestjs/typeorm';
+import { Repository, EntityManager } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
+import { isEmpty } from 'lodash';
+import { md5, randomValue } from '~/utils'
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
+    @InjectEntityManager()
+    private entityManager: EntityManager,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
-    // 创建用户
-    const user = this.userRepository.create(createUserDto);
-    return this.userRepository.save(user);
+  async create({ name, password, ...data }: CreateUserDto) {
+    const exists = await this.userRepository.findOneBy({
+      name,
+    })
+    if (!isEmpty(exists))
+      throw new HttpException('用户名已存在', 400)
+
+    await this.entityManager.transaction(async (manager) => {
+      const salt = randomValue(32)
+
+      if (!password) {
+        // const initPassword = await this.paramConfigService.findValueByKey(
+        //   SYS_USER_INITPASSWORD,
+        // )
+        // password = md5(`${initPassword ?? '123456'}${salt}`)
+      }
+      else {
+        password = md5(`${password ?? '123456'}${salt}`)
+      }
+
+      const u = manager.create(UserEntity, {
+        name,
+        password,
+        ...data,
+        psalt: salt,
+        // roles: await this.roleRepository.findBy({ id: In(roleIds) }),
+        // dept: await DeptEntity.findOneBy({ id: deptId }),
+      })
+
+      const result = await manager.save(u)
+      return result
+    })
   }
 
   findAll() {

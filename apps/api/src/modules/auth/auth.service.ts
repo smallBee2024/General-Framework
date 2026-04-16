@@ -2,6 +2,7 @@ import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { isEmpty } from 'lodash';
 import { JwtService } from '@nestjs/jwt';
+import { md5 } from '~/utils'
 
 @Injectable()
 export class AuthService {
@@ -21,7 +22,9 @@ export class AuthService {
     }
 
     const { password: userPassword } = user;
-    if (userPassword !== password) {
+    const comparePassword = md5(`${password}${user.psalt}`)
+
+    if (comparePassword !== userPassword) {
       throw new HttpException('密码错误', HttpStatus.BAD_REQUEST);
     }
 

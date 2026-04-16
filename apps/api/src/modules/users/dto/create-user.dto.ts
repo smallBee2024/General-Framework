@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsOptional, Matches, MinLength, MaxLength } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, Matches, MinLength, MaxLength, Length } from 'class-validator';
 
 export class CreateUserDto {
   // 字符串，并且不能为空字符串
@@ -6,6 +6,7 @@ export class CreateUserDto {
   @Matches(/^[^\s]+$/)
   @MinLength(4)
   @MaxLength(20)
+  // @Length(4, 20, { message: '名称长度必须在4到20个字符之间' })
   name: string;
 
   @IsString({ message: '密码必须是字符串' })
