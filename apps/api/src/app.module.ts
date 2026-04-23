@@ -8,6 +8,8 @@ import config from '~/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { JwtGuard } from './modules/auth/guards/jwt.guard';
+import { RoleModule } from './modules/system/role/role.module';
+import { MenuModule } from './modules/system/menu/menu.module';
 
 @Module({
   imports: [
@@ -24,6 +26,9 @@ import { JwtGuard } from './modules/auth/guards/jwt.guard';
     DatabaseModule,
     // UsersModule,
     AuthModule,
+    // system modules
+    RoleModule,
+    MenuModule,
   ],
   controllers: [],
   providers: [

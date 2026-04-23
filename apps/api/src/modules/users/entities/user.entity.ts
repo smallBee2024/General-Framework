@@ -6,6 +6,7 @@ import {
   Relation
 } from 'typeorm';
 import { CommonEntity } from '~/common/entity/common.entity';
+import { RoleEntity } from '~/modules/system/role/entities/role.entity';
 
 @Entity('users')
 export class UserEntity extends CommonEntity {
@@ -39,11 +40,11 @@ export class UserEntity extends CommonEntity {
   @Column({ length: 32 })
   psalt: string
 
-  // @ManyToMany(() => RoleEntity, role => role.users)
-  // @JoinTable({
-  //   name: 'user_roles',
-  //   joinColumn: { name: 'user_id', referencedColumnName: 'id' },
-  //   inverseJoinColumn: { name: 'role_id', referencedColumnName: 'id' },
-  // })
-  // roles: Relation<RoleEntity[]>
+  @ManyToMany(() => RoleEntity, role => role.users)
+  @JoinTable({
+    name: 'sys_user_roles',
+    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'role_id', referencedColumnName: 'id' },
+  })
+  roles: Relation<RoleEntity[]>
 }
