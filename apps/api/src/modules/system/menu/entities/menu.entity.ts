@@ -3,7 +3,7 @@ import { CommonEntity } from '~/common/entity/common.entity'
 
 import { RoleEntity } from '../../role/entities/role.entity'
 
-export type MenuType = 'dir' | 'menu' | 'button'
+import { MenuType } from '../dto/menu.dto'
 
 /**
  * 菜单实体（支持树形结构）
@@ -22,20 +22,20 @@ export class MenuEntity extends CommonEntity {
   @Column({ length: 50 })
   title: string
 
-  /** 类型：dir(目录) / menu(菜单) / button(按钮) */
-  @Column({ type: 'varchar', length: 20, default: 'menu' })
+  /** 类型：0(目录) / 1(菜单) / 2(按钮) */
+  @Column({ type: 'tinyint', default: MenuType.MENU })
   type: MenuType
 
   /** 路由路径（目录/菜单常用；按钮可为空） */
-  @Column({ nullable: true, length: 200 })
+  @Column({ nullable: true })
   path: string
 
   /** 前端组件路径（仅菜单常用，可为空） */
-  @Column({ nullable: true, length: 200 })
+  @Column({ nullable: true })
   component: string
 
   /** 图标 */
-  @Column({ nullable: true, length: 50 })
+  @Column({ nullable: true })
   icon: string
 
   /** 排序（越小越靠前） */
@@ -44,7 +44,7 @@ export class MenuEntity extends CommonEntity {
   sort: number
 
   /** 权限标识（如：system:menu:create），用于鉴权/按钮权限 */
-  @Column({ name: 'permission', nullable: true, length: 100 })
+  @Column({ name: 'permission', nullable: true })
   permission: string
 
   /** 是否可见：1 可见；0 隐藏 */

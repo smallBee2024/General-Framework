@@ -1,6 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { CreateMenuDto } from './dto/create-menu.dto';
-import { UpdateMenuDto } from './dto/update-menu.dto';
+import { MenuDto } from './dto/menu.dto';
+// import { UpdateMenuDto } from './dto/update-menu.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MenuEntity } from './entities/menu.entity';
@@ -41,7 +41,7 @@ export class MenuService {
    * - 若传了 `parentId`，需要保证父级存在
    * - 默认值：type=menu、sort=0、visible=1、status=1
    */
-  async create(createMenuDto: CreateMenuDto) {
+  async create(createMenuDto: MenuDto) {
     const parentId = createMenuDto.parentId ?? null
     if (parentId) {
       const parent = await this.menuRepository.findOne({ where: { id: parentId } })
@@ -52,7 +52,7 @@ export class MenuService {
     const entity = this.menuRepository.create({
       parentId,
       title: createMenuDto.title,
-      type: createMenuDto.type ?? 'menu',
+      type: createMenuDto.type ?? 0,
       path: createMenuDto.path ?? null,
       component: createMenuDto.component ?? null,
       icon: createMenuDto.icon ?? null,
@@ -65,30 +65,11 @@ export class MenuService {
   }
 
   /**
-   * 获取菜单树
-   * - 返回树结构，便于前端直接渲染侧边栏/权限菜单
-   */
-  async findAll() {
-    const list = await this.menuRepository.find({
-      order: { sort: 'ASC', id: 'ASC' },
-    })
-    return buildMenuTree(list)
-  }
-
-  /** 获取菜单详情 */
-  async findOne(id: number) {
-    const menu = await this.menuRepository.findOne({ where: { id } })
-    if (!menu)
-      throw new HttpException('菜单不存在', 404)
-    return menu
-  }
-
-  /**
    * 更新菜单
    * - 防止把自己设置为父级（形成环）
    * - 若更新 parentId，需校验父级存在；传 null 表示改为根节点
    */
-  async update(id: number, updateMenuDto: UpdateMenuDto) {
+  async update(id: number, updateMenuDto: MenuDto) {
     const menu = await this.menuRepository.findOne({ where: { id } })
     if (!menu)
       throw new HttpException('菜单不存在', 404)
@@ -109,6 +90,25 @@ export class MenuService {
 
     await this.menuRepository.update(id, updateMenuDto as any)
     return await this.findOne(id)
+  }
+
+  /**
+   * 获取菜单树
+   * - 返回树结构，便于前端直接渲染侧边栏/权限菜单
+   */
+  async findAll() {
+    const list = await this.menuRepository.find({
+      order: { sort: 'ASC', id: 'ASC' },
+    })
+    return buildMenuTree(list)
+  }
+
+  /** 获取菜单详情 */
+  async findOne(id: number) {
+    const menu = await this.menuRepository.findOne({ where: { id } })
+    if (!menu)
+      throw new HttpException('菜单不存在', 404)
+    return menu
   }
 
   /**
